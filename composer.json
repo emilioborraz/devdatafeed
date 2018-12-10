@@ -1,0 +1,17 @@
+{
+    "name": "borraz/devdatafeed",
+    "description": "Dev's data feed",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Emilio Borraz",
+            "email": "emilioborraz@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/finder": "^4.2",
+        "symfony/http-foundation": "^4.2",
+        "symfony/console": "^4.2",
+        "guzzlehttp/guzzle": "~6.0"
+    }
+}
