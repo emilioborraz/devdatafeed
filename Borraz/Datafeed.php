@@ -120,7 +120,7 @@ class Datafeed{
 			!empty($tweet->entities->media) &&
 			is_array($tweet->entities->media)){
 				$firstMedia = array_pop($tweet->entities->media);
-				$mediaUrl = (!empty($firstMedia->media_url_https)) ? $firstMedia->media_url_https : '';
+				$mediaUrl = (!empty($firstMedia->media_url_https)) ? $firstMedia->media_url_https.':thumb' : '';
 		}
 		return $mediaUrl;
 	}
