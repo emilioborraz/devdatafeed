@@ -28,7 +28,9 @@ class Datafeed{
 			$contents = fread($handle, filesize($dataFileName));
 			fclose($handle);
 
-			$headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
+			$headers = ['Content-Type' => 'application/json', 
+				'Accept' => 'application/json',
+				'Access-Control-Allow-Origin' => '*'];
 			$response = new Response($contents, Response::HTTP_OK, $headers);
 		}else{
 			$response = new Response('No data available', Response::HTTP_NO_CONTENT);
@@ -113,8 +115,14 @@ class Datafeed{
 	}
 
 	private function getTweetMedia($tweet){
-		
-		return '';
+		$mediaUrl = '';
+		if(!empty($tweet->entities) &&
+			!empty($tweet->entities->media) &&
+			is_array($tweet->entities->media)){
+				$firstMedia = array_pop($tweet->entities->media);
+				$mediaUrl = (!empty($firstMedia->media_url_https)) ? $firstMedia->media_url_https : '';
+		}
+		return $mediaUrl;
 	}
 
 	/**
