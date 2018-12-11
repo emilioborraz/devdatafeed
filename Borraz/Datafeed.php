@@ -16,6 +16,7 @@ class Datafeed{
 	const TWITTER_SRC = 'twitter';
 	const TWITTER_SCREEN_NAME = 'emilioborraz';
 	const TWITTER_TIMELINE_API = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+	const TWITTER_OAUTH_TOKEN_API = 'https://api.twitter.com/oauth2/token';
 	const TWITTER_API_TIMEOUT = 2.0;
 	const DATA_FILENAME = 'datafeed.json';
 
@@ -55,7 +56,8 @@ class Datafeed{
 		    'timeout'  => self::TWITTER_API_TIMEOUT,
 		]);
 
-		$twitterPromiseRequest = $client->requestAsync('GET', '', ['headers' => ['Authorization' => 'Bearer AAAAAAAAAAAAAAAAAAAAANCkzgAAAAAAXXb3mMwO4i7RYuBmeAUgtfD1J6A%3DtiBlI8lNG8BpDmsws9YpN0ynuhJaz20HUYfzcW0RTjAeqeoJ4c']]);
+		$twitterPromiseRequest = $client->requestAsync('GET', '',
+			['headers' => ['Authorization' => 'Bearer ' . $this->getTwitterAccessToken()]]);
 		
 		return $twitterPromiseRequest->then(
 		    function (ResponseInterface $res){
@@ -67,7 +69,25 @@ class Datafeed{
 		    }
 		);
 	}
+	private function getTwitterAccessToken(){
+		$encodedKeys = urlencode(getenv('TWITTER_API_KEY')) . ':' . urlencode(getenv('TWITTER_API_KEY_SECRET'));
+		$base64EncodedKeys = base64_encode($encodedKeys);
 
+		$client = new Client([
+		    'base_uri' => self::TWITTER_OAUTH_TOKEN_API,
+		    'timeout'  => self::TWITTER_API_TIMEOUT,
+		]);
+		$response = $client->request('POST', '',
+			[
+				'headers' => ['Content-Type' => 'application/x-www-form-urlencoded',
+							'Authorization' => 'Basic '. $base64EncodedKeys],
+				'body' => 'grant_type=client_credentials'
+			]);
+		if(!$jsonResponse = json_decode($response->getBody()->getContents()))
+			throw new Exception("Error getting Twitter token");
+
+		return $jsonResponse->access_token;
+	}
 	/**
 	 * Parse the Twitter API response
 	 * @param  String $tweets

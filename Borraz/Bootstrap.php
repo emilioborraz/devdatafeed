@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Dotenv\Dotenv;
 
 class Bootstrap{
 	/**
@@ -23,6 +24,7 @@ class Bootstrap{
 	 * @return void
 	 */
 	public function run(){
+		$this->loadEnvVariables();
 		$this->serve();
 	}
 
@@ -54,5 +56,10 @@ class Bootstrap{
 			$notFoundResponse->send();
 			die();
 		}
+	}
+
+	protected function loadEnvVariables(){
+		$dotenv = new Dotenv();
+		$dotenv->load(__DIR__.'/../.env');
 	}
 }
