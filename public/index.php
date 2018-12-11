@@ -1,13 +1,15 @@
 <?php
 /**
- * Including components.
+ * Including components and running the app.
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 define('PUBLIC_PATH', __DIR__);
 require_once __DIR__.'/../vendor/autoload.php';
+/**
+ * @todo To create a package from the Borraz classes?
+ */
 require_once __DIR__.'/../Borraz/Datafeed.php';
+require_once __DIR__.'/../Borraz/Bootstrap.php';
 
-$dataFeed = new Borraz\Datafeed();
-$dataFeed->refresh();
+$app = new Borraz\Bootstrap();
+$app->run();

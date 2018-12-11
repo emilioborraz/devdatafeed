@@ -1,6 +1,6 @@
 <?php
 /**
- * Including components.
+ * Dev data feed.
  */
 
 namespace Borraz;
@@ -8,6 +8,7 @@ namespace Borraz;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use Symfony\Component\HttpFoundation\Response;
 
 class Datafeed{
 
@@ -17,6 +18,22 @@ class Datafeed{
 	const TWITTER_TIMELINE_API = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 	const TWITTER_API_TIMEOUT = 2.0;
 	const DATA_FILENAME = 'datafeed.json';
+
+	public function get(){
+		$dataFileName = PUBLIC_PATH . '/' . self::DATA_FILENAME;
+		if(file_exists($dataFileName)){
+
+			$handle = fopen($dataFileName, "r");
+			$contents = fread($handle, filesize($dataFileName));
+			fclose($handle);
+
+			$headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
+			$response = new Response($contents, Response::HTTP_OK, $headers);
+		}else{
+			$response = new Response('No data available', Response::HTTP_NO_CONTENT);
+		}
+		$response->send();
+	}
 
 	public function refresh(){
 		$tweetsDownload = $this->getTweets(self::TWEET_LIMIT);
