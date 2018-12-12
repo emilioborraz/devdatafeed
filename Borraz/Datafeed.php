@@ -46,6 +46,7 @@ class Datafeed{
 					json_encode($parsedTweets));
 			}
 		);
+		$tweetsDownload->wait();
 	}
 	/**
 	 * Gets the latest tweets
