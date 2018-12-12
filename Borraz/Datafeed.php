@@ -17,7 +17,7 @@ class Datafeed{
 	const TWITTER_SCREEN_NAME = 'emilioborraz';
 	const TWITTER_TIMELINE_API = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
 	const TWITTER_OAUTH_TOKEN_API = 'https://api.twitter.com/oauth2/token';
-	const TWITTER_API_TIMEOUT = 2.0;
+	const TWITTER_API_TIMEOUT = 10.0;
 	const DATA_FILENAME = 'datafeed.json';
 
 	public function get(){
