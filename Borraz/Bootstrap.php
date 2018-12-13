@@ -13,18 +13,12 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class Bootstrap{
 	/**
-	 * Init app error settings
-	 */
-	public function __construct(){
-		error_reporting(E_ALL);
-		ini_set('display_errors', 1);
-	}
-	/**
 	 * Runs the application using a simple function for routing & execution
 	 * @return void
 	 */
 	public function run(){
 		$this->loadEnvVariables();
+		$this->setErrorSettings();
 		$this->serve();
 	}
 
@@ -34,15 +28,10 @@ class Bootstrap{
 
 		$context->fromRequest(Request::createFromGlobals());
 
-		$refreshDataRoute = new Route('/refresh', 
-			array('_class' => 'Borraz\Datafeed',
-			'_method' => 'refresh'));
-
 		$getDataFeedRoute = new Route('/', 
 			array('_class' => 'Borraz\Datafeed',
 			'_method' => 'get'));
 
-		$routes->add('refreshDataAction', $refreshDataRoute);
 		$routes->add('getDataAction', $getDataFeedRoute);
 
 		$matcher = new UrlMatcher($routes, $context);
@@ -58,8 +47,16 @@ class Bootstrap{
 		}
 	}
 
-	protected function loadEnvVariables(){
+	public function loadEnvVariables(){
 		$dotenv = new Dotenv();
 		$dotenv->load(__DIR__.'/../.env');
+	}
+
+	protected function setErrorSettings(){
+		if(!empty(getenv(APP_ENV)) &&
+			getenv(APP_ENV) !== 'production'){
+				error_reporting(E_ALL);
+				ini_set('display_errors', 1);
+		}
 	}
 }

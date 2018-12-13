@@ -137,6 +137,7 @@ class Datafeed{
 		flock($fp, LOCK_EX);
 		$bytesWritten = fwrite($fp, $data);
 		fclose($fp);
+		chmod($filePath, 0755);
 		return $bytesWritten;
 	}
 }
