@@ -11,7 +11,7 @@ require_once __DIR__.'/Borraz/Command/RefreshDevFeedData.php';
 
 use Symfony\Component\Console\Application;
 use Borraz\Command\RefreshDevFeedData;
-// var_dump(file_exists(__DIR__.'/Borraz/Bootstrap.php'), __DIR__.'/Borraz/Bootstrap.php');exit;
+
 (new \Borraz\Bootstrap())->loadEnvVariables();
 
 $application = new Application();
